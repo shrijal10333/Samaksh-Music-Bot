@@ -1,0 +1,46 @@
+{
+  "token": "YOUR_BOT_TOKEN_HERE",
+  "prefix": ".",
+  "ownerID": [
+    "YOUR_USER_ID"
+  ],
+  "SpotifyID": "YOUR_SPOTIFY_ID",
+  "SpotifySecret": "YOUR_SPOTIFY_SECRET",
+  "LastFmKey": "YOUR_LASTFM_KEY",
+  "LastFmSecret": "YOUR_LASTFM_SECRET",
+  "color": "#00D4FF",
+  "logs": "",
+  "node_source": "spsearch",
+  "links": {
+    "support": "https://discord.gg/u98eRQRQQZ",
+    "invite": "https://discord.gg/u98eRQRQQZ",
+    "guild": "https://discord.gg/u98eRQRQQZ"
+  },
+  "Webhooks": {
+    "black": "",
+    "player_create": "",
+    "player_delete": "",
+    "guild_join": "",
+    "guild_leave": "",
+    "cmdrun": ""
+  },
+  "nodes": [
+    {
+      "name": "Groove",
+      "url": "lavalinkv4.serenetia.com:443",
+      "auth": "https://seretia.link/discord",
+      "secure": true
+    }
+  ],
+  "node_options": {
+    "moveOnDisconnect": true,
+    "resume": true,
+    "resumeTimeout": 60,
+    "resumeByLibrary": true,
+    "reconnectTries": 15,
+    "reconnectInterval": 10,
+    "restTimeout": 60000,
+    "voiceConnectionTimeout": 30000,
+    "userAgent": "Groove"
+  }
+}
