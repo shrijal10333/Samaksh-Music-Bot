@@ -1,7 +1,15 @@
 const BetterSqlite3 = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 
-const db = new BetterSqlite3(path.join(process.cwd(), 'database.db'));
+const dbPath = process.env.DB_PATH || (process.env.VERCEL ? path.join('/tmp', 'database.db') : path.join(process.cwd(), 'database.db'));
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
+const db = new BetterSqlite3(dbPath);
+
 
 
 db.pragma('journal_mode = WAL');

@@ -4,7 +4,8 @@
   "main": "Shard.js",
   "scripts": {
     "start": "node --no-warnings Shard.js",
-    "dev": "nodemon --no-warnings Shard.js"
+    "dev": "nodemon --no-warnings Shard.js",
+    "vercel-build": "echo 'Vercel build complete'"
   },
   "dependencies": {
     "@discordjs/voice": "^0.17.0",

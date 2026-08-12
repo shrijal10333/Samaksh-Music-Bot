@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: groove-music-bot
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: TOKEN
+        sync: false
+      - key: PREFIX
+        value: .
+      - key: PORT
+        value: 3000

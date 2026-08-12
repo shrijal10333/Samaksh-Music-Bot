@@ -120,6 +120,20 @@ Designed to handle everything your community needs — from high-quality music a
 
 # 📋 Commands
 
+---
+
+## 🌐 Deployment (Vercel & Cloud)
+
+**SamakshBot** is fully configured for **Vercel** deployment and cloud hosting!
+
+- **Vercel**: Hosts the Web Status Dashboard and `/api` Serverless Health Endpoint.
+- **Environment Variables**: Supported out-of-the-box (`.env` or platform environment settings).
+- **Keep-Alive Server**: Built-in HTTP server listening on `PORT` for 24/7 pings.
+
+See [DEPLOYMENT.md](file:///c:/Users/Neha/Downloads/Groove-Music-main/DEPLOYMENT.md) for full step-by-step instructions.
+
+---
+
 ## 🎵 Music
 
 | Command | Description |

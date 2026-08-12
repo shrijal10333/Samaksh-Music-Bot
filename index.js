@@ -16,11 +16,34 @@ const MusicBot = require("./src/structures/MusicClient");
 const initializeCleanup = require("./src/events/Client/PremiumChecks");
 const Dokdo = require("dokdo");
 const config = require("./src/config");
+const http = require("http");
 
 const client = new MusicBot();
 module.exports = client;
 
+// HTTP keep-alive server for web pings / health checks
+const PORT = process.env.PORT || 3000;
+const server = http.createServer((req, res) => {
+  if (req.url === '/health' || req.url === '/ping' || req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'online',
+      bot: client.user ? client.user.tag : 'Connecting...',
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString()
+    }));
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`[Web Server] HTTP health-check server running on port ${PORT}`);
+});
+
 client.connect();
+
 
 client.Jsk = new Dokdo.Client(client, {
   aliases: ["dokdo", "dok", "jsk"],
