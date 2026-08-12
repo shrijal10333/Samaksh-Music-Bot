@@ -1,12 +1,28 @@
 const config = require('../src/config.js');
 
+let botInstance = null;
+function getOrStartBot() {
+  if (!botInstance && config.token && config.token !== "YOUR_BOT_TOKEN_HERE") {
+    try {
+      botInstance = require('../index.js');
+    } catch (e) {
+      console.error("[Vercel Handler] Bot instantiation error:", e.message);
+    }
+  }
+  return botInstance;
+}
+
 module.exports = (req, res) => {
+  const bot = getOrStartBot();
+  const isBotLogged = bot && bot.user;
+  const botTag = isBotLogged ? bot.user.tag : (config.token && config.token !== "YOUR_BOT_TOKEN_HERE" ? "Connecting..." : "Token Missing");
+
   if (req.query && (req.query.json === 'true' || req.query.format === 'json')) {
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).json({
-      name: "Groove Music Bot",
-      status: "online",
-      version: "1.0.0",
+      name: "Samaksh Music Bot",
+      botUser: botTag,
+      botStatus: isBotLogged ? "online" : "initializing",
       prefix: config.prefix || ".",
       support: config.links ? config.links.support : "https://discord.gg/u98eRQRQQZ",
       invite: config.links ? config.links.invite : "https://discord.gg/u98eRQRQQZ",
@@ -20,7 +36,7 @@ module.exports = (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Groove Music Bot - Vercel Dashboard</title>
+  <title>Samaksh Music Bot - Dashboard & Status</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -34,6 +50,7 @@ module.exports = (req, res) => {
       --text: #f0f6fc;
       --text-muted: #8b949e;
       --success: #3fb950;
+      --warning: #d29922;
     }
 
     * {
@@ -152,7 +169,7 @@ module.exports = (req, res) => {
     }
 
     .stat-value {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--text);
       font-family: 'JetBrains Mono', monospace;
@@ -166,14 +183,6 @@ module.exports = (req, res) => {
       margin: 24px 0;
       font-size: 0.95rem;
       line-height: 1.5;
-    }
-
-    .notice-box code {
-      font-family: 'JetBrains Mono', monospace;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: var(--accent);
     }
 
     .actions {
@@ -229,33 +238,40 @@ module.exports = (req, res) => {
     <div class="header">
       <div class="logo-icon">🎵</div>
       <div class="header-text">
-        <h1>Groove Music Bot</h1>
-        <p>Vercel Web API & Serverless Dashboard</p>
+        <h1>Samaksh Music Bot</h1>
+        <p>Bot Status & Web Dashboard</p>
       </div>
     </div>
 
     <div class="badge">
       <div class="badge-dot"></div>
-      Vercel Deployment Active
+      Web Status Active
     </div>
 
     <div class="grid">
       <div class="stat-card">
-        <div class="stat-label">Bot Prefix</div>
+        <div class="stat-label">Bot User</div>
+        <div class="stat-value" style="color: var(--accent);">${botTag}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Prefix</div>
         <div class="stat-value">${config.prefix || "."}</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Lavalink Node</div>
         <div class="stat-value">${config.nodes && config.nodes[0] ? config.nodes[0].name : "Groove"}</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Web API Status</div>
-        <div class="stat-value" style="color: var(--success);">HTTP 200 OK</div>
-      </div>
     </div>
 
     <div class="notice-box">
-      <strong>💡 Deployment Note:</strong> Vercel hosts this Web Status & API endpoint. For 24/7 Discord Voice & Music streaming, combine Vercel with a persistent background host (Railway, Render, Koyeb, Docker, or VPS).
+      <strong>⚠️ Why Discord Bots Need 24/7 Background Hosting:</strong><br>
+      Vercel operates as a <i>Serverless Platform</i> which freezes background Node.js functions after an HTTP response finishes. 
+      <br><br>
+      <strong>How to keep your bot online 24/7:</strong>
+      <ol style="margin-left: 20px; margin-top: 8px;">
+        <li><b>Option A (Recommended)</b>: Deploy to <b>Render.com</b> or <b>Railway.app</b> using <code>npm start</code> (Free 24/7 background runner). Both your bot and website will stay 100% online simultaneously!</li>
+        <li><b>Option B</b>: Set up a free 1-minute ping monitor on <b>UptimeRobot</b> pointing to <code>https://your-app.vercel.app/api?json=true</code> to keep Vercel active.</li>
+      </ol>
     </div>
 
     <div class="actions">
@@ -266,7 +282,7 @@ module.exports = (req, res) => {
   </div>
 
   <footer>
-    Groove Music Bot &bull; Powered by Vercel & Node.js
+    Samaksh Music Bot &bull; Discord Bot & Web Dashboard
   </footer>
 </body>
 </html>`;

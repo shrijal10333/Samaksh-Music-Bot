@@ -38,11 +38,20 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`[Web Server] HTTP health-check server running on port ${PORT}`);
-});
+if (!process.env.VERCEL) {
+  server.listen(PORT, () => {
+    console.log(`[Web Server] HTTP health-check server running on port ${PORT}`);
+  }).on('error', (err) => {
+    console.log(`[Web Server] Port ${PORT} already in use or unavailable: ${err.message}`);
+  });
+}
 
-client.connect();
+if (!client.ws || !client.ws.status) {
+  client.connect().catch(err => {
+    console.error("[MusicBot] Login error:", err.message);
+  });
+}
+
 
 
 client.Jsk = new Dokdo.Client(client, {
